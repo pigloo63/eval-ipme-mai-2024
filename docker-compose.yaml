@@ -1,0 +1,26 @@
+services:
+  mariadb:
+    image: mariadb:11.3
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb -uroot --password=$$MYSQL_ROOT_PASSWORD -e 'select 1'"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - "mariadb:/var/lib/mysql"
+
+  adonis:
+    depends_on:
+        - mariadb
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - "3333:3333"
+
+volumes:
+  mariadb:
