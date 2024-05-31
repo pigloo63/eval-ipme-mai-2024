@@ -17,4 +17,5 @@ WORKDIR /app
 COPY --chown=node:node ./package*.json ./
 COPY --from=build /app .
 EXPOSE 3333
+CMD ["node", "ace", "migration:run"]
 CMD ["node", "./build/bin/server.js"]
